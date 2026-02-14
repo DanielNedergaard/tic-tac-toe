@@ -16,3 +16,32 @@
 .game-grid {
   display: block;
 }
+
+.tile-row {
+  margin-bottom: -4px;
+}
+.tile-button {
+  height: 75px;
+  width: 75px;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.start-button {
+  padding: 0.6em 1.2em;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  transition: border-color 0.25s;
+}
+.start-button:hover {
+  border-color: #646cff;
+}
+button:focus,
+.start-button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
