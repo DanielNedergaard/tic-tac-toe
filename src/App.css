@@ -11,6 +11,7 @@
 
 .game-message-span {
   display: block;
+  margin-bottom: 10px;
 }
 
 .game-grid {
@@ -37,6 +38,7 @@
   font-family: inherit;
   background-color: #1a1a1a;
   transition: border-color 0.25s;
+  margin-top: 10px;
 }
 .start-button:hover {
   border-color: #646cff;
