@@ -26,6 +26,9 @@ h1 {
 }
 
 button {
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
   cursor: pointer;
 }
 
