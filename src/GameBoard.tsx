@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useEffect } from "react"
 
 export default function GameBoard() {
     const [tiles, setTiles] = useState<(string | null)[]>(Array(9).fill(null));
