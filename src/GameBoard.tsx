@@ -1,25 +1,36 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 
 export default function GameBoard() {
     const [tiles, setTiles] = useState<(string | null)[]>(Array(9).fill(null));
-    const currentPlayer =useRef<string>("X");
-    const [gameMessage, setGameMessage] = useState<string>(`Player ${currentPlayer.current}'s turn`);
+    const [currentPlayer, setCurrentPlayer] =useState<string>("X");
+    const [gameMessage, setGameMessage] = useState<string>(`Player ${currentPlayer}'s turn`);
+
+    useEffect(() => {
+        setGameMessage(`Player ${currentPlayer}'s turn`);
+    }, [currentPlayer]);
 
     function tileClicked(index: number) {
         setTiles(previousArray => {
             const newArray = [...previousArray];
-            newArray[index] = currentPlayer.current;
+            newArray[index] = currentPlayer;
             return newArray;
         });
 
-        // Switch player
-        if (currentPlayer.current == "X") {
-            currentPlayer.current = "O";
-            setGameMessage(`Player ${currentPlayer.current}'s turn`);
+        SwitchPlayer();
+    }
+
+    function SwitchPlayer() {
+        if (currentPlayer == "X") {
+            setCurrentPlayer("O");
         } else {
-            currentPlayer.current = "X";
-            setGameMessage(`Player ${currentPlayer.current}'s turn`);
+            setCurrentPlayer("X");
         }
+    }
+
+    function StartNewGame() {
+        SwitchPlayer();
+        const cleanGameGrid: (string | null)[] = (Array(9).fill(null));
+        setTiles(cleanGameGrid);
     }
 
     return (
@@ -30,7 +41,7 @@ export default function GameBoard() {
                     <button key={index} className="tile-button" onClick={() => tileClicked(index)}>{value}</button>
                 ))}
             </div>
-            <button className="start-button">Start new game</button>
+            <button className="start-button" onClick={StartNewGame}>Start new game</button>
         </>
     )
 }
