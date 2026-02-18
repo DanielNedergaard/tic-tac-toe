@@ -6,10 +6,19 @@ export default function GameBoard() {
     const [gameMessage, setGameMessage] = useState<string>(`Player ${currentPlayer}'s turn`);
     const totalPlacedMarks = useRef<number>(0);
     const maxTotalCurrentMarks: number = 6;
-    // const currentMarksOfX = useRef<number>(0);
-    // const currentMarksOfO = useRef<number>(0);
     const isPlacingMark = useRef<boolean>(true);
-    const lastRemovedMark =useRef<number | null>(null);
+    const lastRemovedMark = useRef<number | null>(null);
+    const isGameOver = useRef<boolean>(false);
+    const winnerLines : number[][] = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
 
     useEffect(() => {
         setGameMessage(`Player ${currentPlayer}'s turn`);
@@ -21,22 +30,33 @@ export default function GameBoard() {
         if (clickedTile === currentPlayer && isPlacingMark.current)
             return;
         // Do nothing when clicking a tile marked by the other player
-        if (clickedTile !== currentPlayer && tiles[index] !== null)
+        if (clickedTile !== currentPlayer && clickedTile !== null)
             return;
         // Do nothing when clicking a tile not marked by the player when removing a mark
-        if ((clickedTile !== currentPlayer || null) && !isPlacingMark.current)
+        if ((clickedTile !== currentPlayer) && !isPlacingMark.current)
             return;
-        // do nothing when clicking a tile which the player just removed a mark from
+        // Do nothing when clicking a tile which the player just removed a mark at
         if (index === lastRemovedMark.current)
             return;
+        if (isGameOver.current)
+            return;
         
+        let newTiles: (string | null)[]; 
         if (isPlacingMark.current) {
-            updateTile(index, currentPlayer)
+            newTiles = createNewTiles(index, currentPlayer)
             lastRemovedMark.current = null;
+            setTiles(newTiles);
+            if (HasPlayerWon(newTiles)){
+                setGameMessage(`Player ${currentPlayer} has won!`);
+                isGameOver.current = true;
+                return;
+            }
         } else {
-            updateTile(index, null);
+            newTiles = createNewTiles(index, null);
             lastRemovedMark.current = index;
+            setTiles(newTiles);
         }
+        
 
         totalPlacedMarks.current += 1;
 
@@ -50,16 +70,23 @@ export default function GameBoard() {
         }
     }
 
-    function updateTile(index: number, value: string | null ) {
-        setTiles(tiles =>
-            tiles.map((t, i) =>
-                i === index ? value : t
-            )
+    function createNewTiles(index: number, value: string | null ) : (string | null)[] {
+        return tiles.map((t, i) =>
+            i === index ? value : t
         );
     }
 
     function SwitchPlayer() {
         (currentPlayer == "X") ? setCurrentPlayer("O") : setCurrentPlayer("X");
+    }
+
+    function HasPlayerWon(newTiles: (string | null)[]) : boolean {
+        for (let row = 0; row < winnerLines.length; row++) {
+            const [a, b, c] = winnerLines[row];
+            if (newTiles[a] === currentPlayer && newTiles[b] === currentPlayer && newTiles[c] === currentPlayer )
+                return true;
+        }
+        return false;
     }
 
     function StartNewGame() {
@@ -69,6 +96,7 @@ export default function GameBoard() {
         totalPlacedMarks.current = 0;
         isPlacingMark.current = true;
         lastRemovedMark.current = null;
+        isGameOver.current = false;
     }
 
     return (
