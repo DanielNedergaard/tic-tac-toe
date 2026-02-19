@@ -35,8 +35,6 @@
 .start-button {
   padding: 0.6em 1.2em;
   border-radius: 8px;
-  border: 1px solid transparent;
-  background-color: #1a1a1a;
   transition: border-color 0.25s;
   margin-top: 10px;
 }
