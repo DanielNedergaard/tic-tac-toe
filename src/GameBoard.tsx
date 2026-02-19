@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from "react"
+import useSound from "use-sound";
+import victoryFanfare from './assets/victory-fanfare.mp3';
 
 export default function GameBoard() {
     const [tiles, setTiles] = useState<(string | null)[]>(Array(9).fill(null));
-    const [currentPlayer, setCurrentPlayer] =useState<string>("X");
+    const [currentPlayer, setCurrentPlayer] = useState<string>("X");
     const [gameMessage, setGameMessage] = useState<string>(`Player ${currentPlayer}'s turn`);
     const totalPlacedMarks = useRef<number>(0);
     const maxTotalCurrentMarks: number = 6;
     const isPlacingMark = useRef<boolean>(true);
     const lastRemovedMark = useRef<number | null>(null);
+    const [playVictoryFanfare] = useSound(victoryFanfare, { volume: 0.5 });
     const isGameOver = useRef<boolean>(false);
-    const winnerLines : number[][] = [
+
+    const winnerLines: number[][] = [
         [0, 1, 2],
         [3, 4, 5],
         [6, 7, 8],
@@ -49,6 +53,7 @@ export default function GameBoard() {
             totalPlacedMarks.current += 1;
             if (HasPlayerWon(newTiles)){
                 setGameMessage(`Player ${currentPlayer} has won!`);
+                playVictoryFanfare();
                 isGameOver.current = true;
                 return;
             }
@@ -68,7 +73,7 @@ export default function GameBoard() {
         }
     }
 
-    function createNewTiles(index: number, value: string | null ) : (string | null)[] {
+    function createNewTiles(index: number, value: string | null ): (string | null)[] {
         return tiles.map((t, i) =>
             i === index ? value : t
         );
@@ -78,7 +83,7 @@ export default function GameBoard() {
         (currentPlayer == "X") ? setCurrentPlayer("O") : setCurrentPlayer("X");
     }
 
-    function HasPlayerWon(newTiles: (string | null)[]) : boolean {
+    function HasPlayerWon(newTiles: (string | null)[]): boolean {
         for (let row = 0; row < winnerLines.length; row++) {
             const [a, b, c] = winnerLines[row];
             if (newTiles[a] === currentPlayer && newTiles[b] === currentPlayer && newTiles[c] === currentPlayer )
