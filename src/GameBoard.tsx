@@ -46,6 +46,7 @@ export default function GameBoard() {
             newTiles = createNewTiles(index, currentPlayer)
             lastRemovedMark.current = null;
             setTiles(newTiles);
+            totalPlacedMarks.current += 1;
             if (HasPlayerWon(newTiles)){
                 setGameMessage(`Player ${currentPlayer} has won!`);
                 isGameOver.current = true;
@@ -56,9 +57,6 @@ export default function GameBoard() {
             lastRemovedMark.current = index;
             setTiles(newTiles);
         }
-        
-
-        totalPlacedMarks.current += 1;
 
         if (isPlacingMark.current) {
             SwitchPlayer();
