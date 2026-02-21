@@ -51,7 +51,7 @@ export default function GameBoard() {
             lastRemovedMark.current = null;
             setTiles(newTiles);
             totalPlacedMarks.current += 1;
-            if (HasPlayerWon(newTiles)){
+            if (hasPlayerWon(newTiles)){
                 setGameMessage(`Player ${currentPlayer} has won!`);
                 playVictoryFanfare();
                 isGameOver.current = true;
@@ -64,7 +64,7 @@ export default function GameBoard() {
         }
 
         if (isPlacingMark.current) {
-            SwitchPlayer();
+            switchPlayer();
         }
 
         // switch between removing and placing marks after 6 marks are placed
@@ -79,11 +79,11 @@ export default function GameBoard() {
         );
     }
 
-    function SwitchPlayer() {
+    function switchPlayer() {
         (currentPlayer == "X") ? setCurrentPlayer("O") : setCurrentPlayer("X");
     }
 
-    function HasPlayerWon(newTiles: (string | null)[]): boolean {
+    function hasPlayerWon(newTiles: (string | null)[]): boolean {
         for (let row = 0; row < winnerLines.length; row++) {
             const [a, b, c] = winnerLines[row];
             if (newTiles[a] === currentPlayer && newTiles[b] === currentPlayer && newTiles[c] === currentPlayer )
@@ -92,8 +92,8 @@ export default function GameBoard() {
         return false;
     }
 
-    function StartNewGame() {
-        SwitchPlayer();
+    function startNewGame() {
+        switchPlayer();
         const cleanGameGrid: (string | null)[] = (Array(9).fill(null));
         setTiles(cleanGameGrid);
         totalPlacedMarks.current = 0;
@@ -110,7 +110,7 @@ export default function GameBoard() {
                     <button key={index} className="tile-button" onClick={() => handleTileClick(index)}>{value}</button>
                 ))}
             </div>
-            <button className="start-button" onClick={StartNewGame}>Start new game</button>
+            <button className="start-button" onClick={startNewGame}>Start new game</button>
         </>
     )
 }
