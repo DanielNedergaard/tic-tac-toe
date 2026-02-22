@@ -5,10 +5,11 @@ npm install
 npm run dev
 ```
 
-## Build
+## Build and preview
 
 ```bash
 npm run build
+npm run preview
 ```
 
 ## Additional Notes
